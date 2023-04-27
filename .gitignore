@@ -1,0 +1,26 @@
+.DS_Store
+cesium/
+esri/
+leaflet/
+node_modules/
+node_modules-/
+node_modules*/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+tests/**/coverage/
+*copy.js
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+ol/v3/index.vue
+ol/v3/mapConfig.js
+public/components-v2/
+ol/v2/
