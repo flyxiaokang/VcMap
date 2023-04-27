@@ -4,7 +4,7 @@
  * @Author: kangjinrui
  * @Date: 2022-10-27 16:30:42
  * @LastEditors: kangjinrui
- * @LastEditTime: 2023-03-14 15:21:32
+ * @LastEditTime: 2023-04-27 17:39:38
 -->
 <template>
     <Draggable
@@ -26,7 +26,7 @@
 </template>
 <script setup>
 import {layerTreeData,layerTreeData2} from './data.js'
-import Draggable from "../Draggable/index.vue";
+import Draggable from "../../export/Draggable/index.vue";
 
 import { defineEmits } from "vue";
 

@@ -4,7 +4,7 @@
  * @Author: kangjinrui
  * @Date: 2022-02-11 17:36:50
  * @LastEditors: kangjinrui
- * @LastEditTime: 2023-04-26 16:33:38
+ * @LastEditTime: 2023-04-27 14:05:00
  */
 
 import { Draw, Modify, Snap, Select } from 'ol/interaction'
@@ -18,7 +18,7 @@ import Commonutils from '@/VcMap/public/utils/base/function'
 
 import { checkLayerIsExist, removeLayerById } from './LayerHandler'
 
-const DRAW_TYPE = ['Point','LineString','Polygon','Circle','Box','Ring']
+const DRAW_TYPE = ['Point', 'LineString', 'Polygon', 'Circle', 'Box', 'Ring']
 
 class DrawHandler {
   constructor(map = null) {
@@ -33,6 +33,54 @@ class DrawHandler {
     this.map = map
 
     this.layerId = 'layerId_draw'
+    this.imageStyle = { radius: 7 }
+
+    this.defaultStyle = new Style({
+      fill: new Fill({
+        color: 'rgba(255, 208, 75, 0.5)',
+      }),
+      stroke: new Stroke({
+        color: '#ffcc33',
+        width: 2,
+      }),
+      image: new CircleStyle({
+        fill: new Fill({
+          color: '#ffcc33',
+        }),
+        ...this.imageStyle,
+      }),
+    })
+
+    this.source = null
+    this.vector = null
+
+    // this.source = new VectorSource({
+    //   wrapX: false,
+    // })
+
+    // this.vector = new VectorLayer({
+    //   id: this.layerId,
+    //   source: this.source,
+    //   style: this.defaultStyle,
+    // })
+  }
+
+  getVetorLayer() {
+    this.defaultStyle = new Style({
+      fill: new Fill({
+        color: 'rgba(255, 208, 75, 0.5)',
+      }),
+      stroke: new Stroke({
+        color: '#ffcc33',
+        width: 2,
+      }),
+      image: new CircleStyle({
+        fill: new Fill({
+          color: '#ffcc33',
+        }),
+        ...this.imageStyle,
+      }),
+    })
 
     this.source = new VectorSource({
       wrapX: false,
@@ -41,22 +89,10 @@ class DrawHandler {
     this.vector = new VectorLayer({
       id: this.layerId,
       source: this.source,
-      style: new Style({
-        fill: new Fill({
-          color: 'rgba(255, 208, 75, 0.5)',
-        }),
-        stroke: new Stroke({
-          color: '#ffcc33',
-          width: 2,
-        }),
-        image: new CircleStyle({
-          radius: 7,
-          fill: new Fill({
-            color: '#ffcc33',
-          }),
-        }),
-      }),
+      style: this.defaultStyle,
     })
+
+    return this.vector
   }
 
   initVectorLayer(map) {
@@ -134,6 +170,7 @@ class DrawHandler {
       once = false,
       freehand = false,
       drawEndHandle = null,
+      imageStyle = null,
     } = {
       type: 'Point',
       snapEnable: false,
@@ -142,25 +179,32 @@ class DrawHandler {
       drawEndHandle: null,
     }
   ) {
+    debugger
     if (Commonutils.isNullOrUndifiend(map)) {
       console.error('map不能为空')
       return false
     }
-    if(!DRAW_TYPE.includes(type)){
-      console.error('未知类型',type)
+    if (!DRAW_TYPE.includes(type)) {
+      console.error('未知类型', type)
       return false
+    }
+    if (imageStyle) {
+      this.imageStyle = imageStyle
     }
     this.selectEnable = selectEnable
     let draw = null
-    let { source, vector, layerId } = this
+
+    let { layerId } = this
 
     if (this.draw !== null) {
       this.removeInteraction(map)
     }
 
     if (!checkLayerIsExist(map, layerId)) {
-      map.addLayer(vector)
+      map.addLayer(this.getVetorLayer())
     }
+
+    let { source } = this
 
     if (type === 'Box') {
       draw = new Draw({
@@ -228,8 +272,9 @@ class DrawHandler {
   }
 
   clear(map = this.map) {
-    this.vector.getSource().clear()
-    // removeLayerById(this.layerId, map)
+    this.vector?.getSource()?.clear()
+    // map.removeLayer(this.vector)
+    // removeLayerById(map, this.layerId, true)
   }
 }
 

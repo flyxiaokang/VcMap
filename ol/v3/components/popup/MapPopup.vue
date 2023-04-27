@@ -86,8 +86,8 @@ const getHtml = (data) => {
     height: 30px;
     line-height: 30px;
     background-color: #409eff;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
 }
 
 .ol-popup:after,

@@ -33,6 +33,8 @@
     </div>
     <div :id="mapContanier" class="map-view" />
 
+    <slot name="popup"></slot>
+
     <!-- popup -->
     <MapPopup
       v-show="showFeaturePopupLocal"
@@ -152,7 +154,7 @@
 </template>
 
 <script setup>
-import { getOlInstance } from '@/VcMap/ol/init'
+import { getOlHandler } from '@/VcMap/ol/init'
 import { setConfig, getConfig } from '@/VcMap/ol/config'
 import { uuidOnlyStr } from '@/VcMap/public/utils/base/string'
 import CommonUtils from '@/VcMap/public/utils/base/function'
@@ -168,7 +170,7 @@ import TableWidget from '@/VcMap/public/components/Table/index.vue'
 import Draggable from '@/VcMap/public/export/Draggable/index.vue'
 import { ref, toRefs, onMounted, computed, watch, reactive } from 'vue'
 
-const olInstance = getOlInstance()
+const olInstance = getOlHandler()
 
 const props = defineProps({
   mapConfig: {
